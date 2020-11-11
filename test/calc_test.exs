@@ -19,11 +19,21 @@ defmodule CalcTest do
   test "adding" do
     calc = spawn(&Calc.start/0)
 
-    send(calc, 1)
-    send(calc, 1)
+    send(calc, {:+, 1})
+    send(calc, {:+, 1})
 
     send(calc, {:print, self()})
     assert_receive 2
+  end
+
+  test "substracting" do
+    calc = spawn(&Calc.start/0)
+
+    send(calc, {:-, 1})
+    send(calc, {:-, 1})
+
+    send(calc, {:print, self()})
+    assert_receive -2
   end
 
   test "sending anything else does not crash the calc" do
