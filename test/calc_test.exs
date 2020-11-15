@@ -11,29 +11,25 @@ defmodule CalcTest do
 
   test "starts with zero" do
     calc = spawn(&Calc.start/0)
-
-    send(calc, {:print, self()})
-    assert_receive 0
+    assert Calc.value(calc) == 0
   end
 
   test "adding" do
     calc = spawn(&Calc.start/0)
 
-    send(calc, {:+, 1})
-    send(calc, {:+, 1})
+    Calc.add(calc, 1)
+    Calc.add(calc, 1)
 
-    send(calc, {:print, self()})
-    assert_receive 2
+    assert Calc.value(calc) == 2
   end
 
   test "substracting" do
     calc = spawn(&Calc.start/0)
 
-    send(calc, {:-, 1})
-    send(calc, {:-, 1})
+    Calc.minus(calc, 1)
+    Calc.minus(calc, 1)
 
-    send(calc, {:print, self()})
-    assert_receive -2
+    assert Calc.value(calc) == -2
   end
 
   test "sending anything else does not crash the calc" do
@@ -43,8 +39,7 @@ defmodule CalcTest do
     send(calc, nil)
     send(calc, [])
 
-    send(calc, {:print, self()})
-    assert_receive 0
+    assert Calc.value(calc) == 0
 
     assert Process.alive?(calc)
   end
