@@ -1,5 +1,5 @@
 # Calc
 
 ```sh
-mix test
+mix.bat test
 ```
